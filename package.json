@@ -1,0 +1,16 @@
+{
+  "name": "allymar-hourly",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Allymar Hourly: hours and invoices for Allymar Health Solutions",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "reset-owner-password": "node scripts/reset-owner-password.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  }
+}

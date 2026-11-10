@@ -1,0 +1,29 @@
+# Render Blueprint: one web service + one PostgreSQL database.
+services:
+  - type: web
+    name: allymar-hourly
+    runtime: node
+    plan: starter            # always on (~$7/mo). "free" works but sleeps when idle.
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_TIMEZONE
+        value: America/New_York
+      - key: OWNER_NAME
+        value: Chris Lowry
+      - key: OWNER_USERNAME
+        value: chris.lowry
+      - key: OWNER_PASSWORD   # Render asks for this when you create the Blueprint
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: allymar-hourly-db
+          property: connectionString
+databases:
+  - name: allymar-hourly-db
+    plan: basic-256mb        # ~$6/mo, never expires
+    databaseName: hourly
+    user: hourly
