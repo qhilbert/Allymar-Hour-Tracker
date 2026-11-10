@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "reset-owner-password": "node scripts/reset-owner-password.js"
+    "reset-owner-password": "node reset-owner-password.js"
   },
   "engines": { "node": ">=20" },
   "dependencies": {

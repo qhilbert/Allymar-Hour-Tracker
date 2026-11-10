@@ -8,7 +8,7 @@ const path = require('path');
 const crypto = require('crypto');
 const express = require('express');
 const { Pool, types } = require('pg');
-const PP = require('./public/payperiod.js');
+const PP = require('./payperiod.js');
 
 types.setTypeParser(1700, (v) => (v === null ? null : parseFloat(v))); // NUMERIC -> number
 
@@ -523,8 +523,12 @@ api.all('/owner/settings', route(async (req) => {
 
 app.use('/api', api);
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));
-app.use(express.static(path.join(__dirname, 'public'), { index: 'index.html', maxAge: PROD ? '1h' : 0 }));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+const STATIC = { '/app.js': 'app.js', '/payperiod.js': 'payperiod.js', '/styles.css': 'styles.css' };
+app.get(Object.keys(STATIC), (req, res) => {
+  if (PROD) res.set('Cache-Control', 'public, max-age=3600');
+  res.sendFile(path.join(__dirname, STATIC[req.path]));
+});
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 // ------------------------------------------------------------------ startup
 async function init() {
